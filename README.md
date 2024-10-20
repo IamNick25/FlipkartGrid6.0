@@ -238,3 +238,24 @@ So here we started with the orientation from above 0 degrees since in most produ
 ## Integrated Code
 
 So finally in the integrated_code python notebook after installing the dependencies and libraries mentioned, we would be able to run the code like as demonstrated in the video file . We used Tkinter for hosting a UI and ran it on our local machine. The outputs were obtained within 3-4 seconds. Proper lighting and a proper camera could have improved the chances of more accuracy. But here we used our laptop's webcam for the photo so it was not as accurate as it was when we ran it separately in colab notebooks where proper images with proper orientations were  taken from camera
+
+## Datasets
+
+The dataset for the tear detection and fruitfreshness detection are mentioned with respective names and in the datasets option. The evaluation criteria were also properly used as were mentioned in the Problem statement like confusion matrix, etc which can be seen in the training_steps_of_the_fruit_freshness.ipynb as mentioned here :
+```python
+# Evaluate on test data
+test_loss,test_acc=model.evaluate(test_generator, steps=test_generator.samples // BATCH_SIZE)
+print(f"Test Accuracy: {test_acc}")
+
+# Classification report
+test_generator.reset()
+predictions=model.predict(test_generator, steps=test_generator.samples // BATCH_SIZE)
+predicted_classes=tf.argmax(predictions, axis=1)
+true_classes=test_generator.classes
+class_labels=list(test_generator.class_indices.keys())
+
+print(classification_report(true_classes, predicted_classes, target_names=class_labels))
+
+# Confusion Matrix
+cm =confusion_matrix(true_classes, predicted_classes)
+print("Confusion Matrix:\n", cm)
