@@ -65,6 +65,6 @@ time_taken = end - start
 print(f"Time Taken: {time_taken}")
 print(result)
 ```
-
+Currently, it’s using my API key, but you can create your own in the Groq website at https://console.groq.com/keys. Once everything is set up, the code takes around 10 seconds to run on a CPU and is much faster on a GPU, typically around 2 seconds. The API call takes about 0.5 seconds.
 
 
