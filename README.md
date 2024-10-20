@@ -65,6 +65,25 @@ time_taken = end - start
 print(f"Time Taken: {time_taken}")
 print(result)
 ```
+This is for the celaning and proper formatting of the text, so we are using groq api call which is trained on a LLM
+```python
+from groq import Groq
+
+GROQ_API_KEY= "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"
+client = Groq(api_key=GROQ_API_KEY)
+completion = client.chat.completions.create(
+    model="llama3-8b-8192",
+    messages=[{"role": "user", "content": f"Organize and clean up the following text into a proper readable format with appropriate sections:\n\n{final_text}"}],
+    temperature=1,
+    max_tokens=1024,
+    top_p=1,
+    stream=True,
+    stop=None,
+)
+
+for chunk in completion:
+    print(chunk.choices[0].delta.content or "", end="")
+```
 Currently, it’s using my API key, but you can create your own in the Groq website at https://console.groq.com/keys. Once everything is set up, the code takes around 10 seconds to run on a CPU and is much faster on a GPU, typically around 2 seconds. The API call takes about 0.5 seconds.
 
 ## Fruit Freshness
