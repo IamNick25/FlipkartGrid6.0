@@ -54,6 +54,17 @@ T = threshold_local(V, 45, offset=5, method="gaussian")
 thresh = (V > T).astype("uint8") * 255
 cv2_imshow(thresh)
 
+Ensure that you install all the required libraries beforehand. You can use a T4 GPU and set the GPU parameter in this code block:
+
+```python
+reader = Reader(['en'], gpu=True)
+start = time.time()
+result = reader.readtext(image)
+end = time.time()
+time_taken = end - start
+print(f"Time Taken: {time_taken}")
+print(result)
+
 
 
 
