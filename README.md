@@ -37,6 +37,22 @@ This function is used to split the dataset into training, validation, and test s
 3. Define the model architecture using TensorFlow's Keras API.
 4. Train the model and evaluate its performance using the provided metrics.
 
+---
+
+## EasyOCR Intermediate Step
+
+In `easyocr.ipynb` file, this is an intermediate step where we attempted to obtain accurate OCR text recognition in a list called `final_text` and then used a Groq API call to clean and arrange the text in a formatted and structured way.
+
+Set the file path in this code block:
+
+```python
+image = cv2.imread('/content/WhatsApp Image 2024-10-16 at 12.26.41 AM.jpeg')
+imshow("Original Image", image, size=12)
+
+V = cv2.split(cv2.cvtColor(image, cv2.COLOR_BGR2HSV))[2]
+T = threshold_local(V, 45, offset=5, method="gaussian")
+thresh = (V > T).astype("uint8") * 255
+cv2_imshow(thresh)
 
 
 
