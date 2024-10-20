@@ -234,3 +234,7 @@ image_path = '/content/WhatsApp Image 2024-10-18 at 5.02.40 PM.jpeg'  # Replace 
 process_image(image_path)
 ```
 So here we started with the orientation from above 0 degrees since in most product there would be a line detected in the filtered image which would be at 0 degrees like a bottle cap tightened on a bottle, a earbud case, etc, thus increasing our chances of detecting a tear. We also think of implementing some algorithm to the obtained filtered image and then on the basis of pattern, to obtain the result.  
+
+## Integrated Code
+
+So finally in the integrated_code python notebook after installing the dependencies and libraries mentioned, we would be able to run the code like as demonstrated in the video file . We used Tkinter for hosting a UI and ran it on our local machine. The outputs were obtained within 3-4 seconds. Proper lighting and a proper camera could have improved the chances of more accuracy. But here we used our laptop's webcam for the photo so it was not as accurate as it was when we ran it separately in colab notebooks where proper images with proper orientations were  taken from camera
