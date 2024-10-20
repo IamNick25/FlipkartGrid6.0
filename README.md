@@ -67,4 +67,55 @@ print(result)
 ```
 Currently, it’s using my API key, but you can create your own in the Groq website at https://console.groq.com/keys. Once everything is set up, the code takes around 10 seconds to run on a CPU and is much faster on a GPU, typically around 2 seconds. The API call takes about 0.5 seconds.
 
+## Fruit Freshness
 
+The notebook FruitFreshness_GaborFilterDefect_PerspectiveTransform.ipynb has given the steps in the comments which you can follow. Make sure to download the model weights in the .h5 format and the upload it to you google drive, set the proper image paths in the respective code blocks. The model summary which mentions its architecture is also mentioned in the colab notebook shared. It was trained upto 80 eppochs due to lack of processing power but can go upto an accuracy of 97% with strong processors like A100. The training process can be checked in Training_steps_of_the_fruitfreshness.ipynb
+
+##Perspective Transform
+
+Since images need to be properly zoomed in after camera takes the picture, we used perspective transform to get the contours of the captured image and took the extreme coordinates of the contours to zoom in the image as much as possible. Still its recommended to go for a unicolour background with proper lighting.
+This is the code below mentioned 
+```python
+import cv2
+import numpy as np
+import matplotlib.pyplot as plt
+
+def imshow(title="Image",image=None,size=10):
+    w,h=image.shape[0],image.shape[1]
+    aspect_ratio=w/h
+    plt.figure(figsize=(size*aspect_ratio,size))
+    plt.imshow(cv2.cvtColor(image,cv2.COLOR_BGR2RGB))
+    plt.title(title)
+    plt.show()
+
+image=cv2.imread('/content/OtrivinBbg.jpeg')
+image2=cv2.imread("/content/OtrivinBbg.jpeg")
+gray=cv2.cvtColor(image,cv2.COLOR_BGR2GRAY)
+
+_,th=cv2.threshold(gray,0,255,cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+
+#imshow("Original",image)
+imshow("Threshold",th)
+
+contours,hierarchy=cv2.findContours(th,cv2.RETR_EXTERNAL,cv2.CHAIN_APPROX_SIMPLE)
+cv2.drawContours(image,contours,-1,(0,255,0),thickness=2)
+imshow("Contours",image)
+print(str(len(contours)))
+sorted_contours=sorted(contours,key=cv2.contourArea,reverse=True)
+
+min_x=float('inf')
+max_x=float('-inf')
+min_y=float('inf')
+max_y=float('-inf')
+for cnt in sorted_contours:
+    x,y,w,h=cv2.boundingRect(cnt)
+    min_x=min(min_x, x)
+    max_x=max(max_x, x + w)
+    min_y=min(min_y, y)
+    max_y=max(max_y, y + h)
+
+#print(f"Overall bounding box - min_x:{min_x},max_x:{max_x},min_y:{min_y},max_y:{max_y}")
+cv2.rectangle(image,(min_x, min_y),(max_x, max_y),(0, 255, 0),2)
+cropped_image=image2[min_y:max_y, min_x:max_x]
+cv2_imshow(cropped_image)
+cv2.waitKey(0)
