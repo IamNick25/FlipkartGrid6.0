@@ -138,3 +138,99 @@ cv2.rectangle(image,(min_x, min_y),(max_x, max_y),(0, 255, 0),2)
 cropped_image=image2[min_y:max_y, min_x:max_x]
 cv2_imshow(cropped_image)
 cv2.waitKey(0)
+```
+
+## Defects Detection 
+
+So here we plan to use depth camera and IR for the dent detection and counting of products purposes respectively. For tear we used gabor filter implementation. Here is the code:
+```python
+import cv2
+import numpy as np
+from skimage import feature, color
+import matplotlib.pyplot as plt
+
+# Load an image in grayscale
+def load_image(image_path):
+    image = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+    if image is None:
+        raise ValueError("Image not found or unable to load!")
+    return image
+
+# Apply Local Binary Pattern (LBP)
+
+
+
+# Apply Gabor filter bank (multiple filters at different scales and orientations)
+def apply_gabor_filter(image, num_scales=4, num_orientations=6):
+    gabor_images = []
+
+    # Generate Gabor kernels for different scales and orientations
+    for scale in range(1, num_scales + 1):
+        for theta in range(num_orientations):
+            theta_rad = theta * np.pi / num_orientations
+            kernel = cv2.getGaborKernel((21, 21), sigma=4.0, theta=theta_rad, lambd=10.0/scale, gamma=0.5, psi=0)
+            filtered_image = cv2.filter2D(image, cv2.CV_8UC3, kernel)
+            gabor_images.append(filtered_image)
+
+    # Combine all Gabor-filtered images
+    combined_gabor = np.maximum.reduce(gabor_images)
+    return combined_gabor
+
+# Detect tears based on Gabor filter (edge detection on Gabor-filtered output)
+def detect_tear_gabor(gabor_image, edge_threshold=100):
+    # Apply edge detection (Canny) to the Gabor filtered image
+    edges = cv2.Canny(gabor_image, threshold1=edge_threshold, threshold2=edge_threshold * 2)
+
+    # Check if a significant number of edges are detected (indicating a tear)
+    edge_density = np.sum(edges) / edges.size
+    if edge_density > 0.05:  # Heuristic threshold
+        return True  # Potential tear detected
+    return False
+
+
+# Plot results
+def plot_results(original, gabor):
+    fig, ax = plt.subplots(1, 3, figsize=(15, 5))
+
+    # Original Image
+    ax[0].imshow(original, cmap='gray')
+    ax[0].set_title('Original Image')
+    ax[0].axis('off')
+
+
+    # Gabor Filtered Image
+    ax[1].imshow(gabor, cmap='gray')
+    ax[1].set_title('Gabor Filtered Image')
+    ax[1].axis('off')
+
+    plt.show()
+
+# Main function
+def process_image(image_path):
+    # Load the image
+    image = load_image(image_path)
+
+    # Apply Local Binary Pattern (LBP)
+
+
+    # Apply Gabor Filters
+    gabor_image = apply_gabor_filter(image)
+
+    tear_detected = detect_tear_gabor(gabor_image)
+
+    # Print results
+
+
+    if tear_detected:
+        print("Tear detected: Yes")
+    else:
+        print("Tear detected: No")
+
+    # Plot the results
+    plot_results(image, gabor_image)
+
+# Example usage:
+image_path = '/content/WhatsApp Image 2024-10-18 at 5.02.40 PM.jpeg'  # Replace with the path to your image
+process_image(image_path)
+```
+So here we started with the orientation from above 0 degrees since in most product there would be a line detected in the filtered image which would be at 0 degrees like a bottle cap tightened on a bottle, a earbud case, etc, thus increasing our chances of detecting a tear. We also think of implementing some algorithm to the obtained filtered image and then on the basis of pattern, to obtain the result.  
