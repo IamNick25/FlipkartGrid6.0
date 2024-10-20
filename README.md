@@ -53,8 +53,8 @@ V = cv2.split(cv2.cvtColor(image, cv2.COLOR_BGR2HSV))[2]
 T = threshold_local(V, 45, offset=5, method="gaussian")
 thresh = (V > T).astype("uint8") * 255
 cv2_imshow(thresh)
-
-Ensure that you install all the required libraries beforehand. You can use a T4 GPU and set the GPU parameter in this code block:
+```
+Ensure that you install all the required libraries beforehand. You can use a T4 GPU and set the GPU parameter in this code block to be true:
 
 ```python
 reader = Reader(['en'], gpu=True)
@@ -64,7 +64,7 @@ end = time.time()
 time_taken = end - start
 print(f"Time Taken: {time_taken}")
 print(result)
-
+```
 
 
 
