@@ -71,7 +71,7 @@ Currently, it’s using my API key, but you can create your own in the Groq webs
 
 The notebook FruitFreshness_GaborFilterDefect_PerspectiveTransform.ipynb has given the steps in the comments which you can follow. Make sure to download the model weights in the .h5 format and the upload it to you google drive, set the proper image paths in the respective code blocks. The model summary which mentions its architecture is also mentioned in the colab notebook shared. It was trained upto 80 eppochs due to lack of processing power but can go upto an accuracy of 97% with strong processors like A100. The training process can be checked in Training_steps_of_the_fruitfreshness.ipynb
 
-##Perspective Transform
+## Perspective Transform
 
 Since images need to be properly zoomed in after camera takes the picture, we used perspective transform to get the contours of the captured image and took the extreme coordinates of the contours to zoom in the image as much as possible. Still its recommended to go for a unicolour background with proper lighting.
 This is the code below mentioned 
